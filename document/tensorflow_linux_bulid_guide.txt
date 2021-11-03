@@ -1,0 +1,148 @@
+//윈도우 CUDA 설치
+
+1. 텐서 플로우가 지원하는 CUDA 버전 확인
+	-> CUDA11.2 and cuDNN 8.1.0
+	
+2. CUDA : https://developer.nvidia.com/cuda-toolkit-archive
+
+3. cuDNN : https://developer.nvidia.com/rdp/cudnn-archive
+
+4. CUDA 설치 -> 재부팅
+
+5. ../NVIDIA GPU Computing Toolkit\CUDA\v11.2 에 cuDNN 압축 폴더 내용물 덮어 씌우기
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// linux 에서 빌드 하기
+
+	git clone https://github.com/tensorflow/tensorflow.git
+
+//설치
+	sudo apt install python
+	sudo apt install python3-dev python3-pip python3-venv
+//확인
+	python3 --version
+	pip3 --version
+
+	# pip 버전이 19.0보다 높은 경우 TensorFlow 2 .whl 패키지를 설치해야 합니다. 추가적인 필수 종속 항목은 REQUIRED_PACKAGES 아래 setup.py 파일에 나열되어 있습니다.
+
+
+//pip 업데이트
+	pip install --upgrade pip
+
+# sys.stderr.write(f"ERROR: {exc}") SyntaxError: invalid syntax Error 발생하면
+	wget https://bootstrap.pypa.io/pip/3.5/get-pip.py
+	python3 get-pip.py
+
+//TensorFlow pip 패키지 종속 항목을 설치
+	pip3 install six numpy wheel
+	pip3 install keras_applications==1.0.6 --no-deps
+	pip3 install keras_preprocessing==1.0.5 --no-deps
+
+	pip install -U --user pip numpy wheel
+	pip install -U --user keras_preprocessing --no-deps
+
+Bazel 설치
+	wget https://github.com/bazelbuild/bazel/releases/download/3.7.2/bazel-3.7.2-linux-x86_64
+	sudo mv ./bazel-3.7.2-linux-x86_64 /usr/bin
+	sudo ln -s /usr/bin/bazel-3.7.2-linux-x86_64 /usr/bin/bazel
+	sudo chmod 755 /usr/binbazel-3.7.2-linux-x86_64 /usr/bin/bazel
+	bazel --version
+
+빌드 구성
+	./configure
+
+pip 패키지 빌드
+	bazel build //tensorflow/tools/pip_package:build_pip_package
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#Error
+	f'Trying to export multiple symbols with same name: {api_name}')
+	->bazel 버전 변경 시도
+		3.7.2 -> 4.2.1
+			wget https://github.com/bazelbuild/bazel/releases/download/4.2.1/bazel-4.2.1-linux-x86_64
+			sudo mv ./bazel-4.2.1-linux-x86_64 /usr/bin
+			sudo ln -s /usr/bin/bazel-4.2.1-linux-x86_64 /usr/bin/bazel
+			sudo chmod 755 /usr/bin/bazel-4.2.1-linux-x86_64 /usr/bin/bazel
+			
+			bazel --version
+
+	-> pip / python 버전?
+		
+		# pip 버전이 19.0보다 높은 경우 TensorFlow 2 .whl 패키지를 설치해야 합니다. 추가적인 필수 종속 항목은 REQUIRED_PACKAGES 아래 setup.py 파일에 나열되어 있습니다.
+		
+		16.04에서 3.8 버전 설치
+			sudo apt-get install build-essential checkinstall
+			sudo apt-get install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev
+			
+			sudo wget https://www.python.org/ftp/python/3.8.1/Python-3.8.1.tgz
+			sudo tar xzf Python-3.8.1.tgz
+			
+			cd Python-3.8.1
+			sudo ./configure --enable-optimizations
+			sudo make altinstall
+			
+			#python3, python3-config
+			#/usr/local/bin/python3.8-config /usr/local/bin/python3.8
+			
+			sudo rm /usr/bin/python3 /usr/bin/python3-config
+			sudo ln -s /usr/local/bin/python3.8 /usr/bin/python3 
+			sudo ln -s /usr/local/bin/python3.8-config /usr/bin/python3-config 
+			
+		Python 3.8 GPU 지원	https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-2.6.0-cp38-cp38-manylinux2010_x86_64.whl
+		Python 3.8 CPU만	 	https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow_cpu-2.6.0-cp38-cp38-manylinux2010_x86_64.whl
+		
+			wget https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow_cpu-2.6.0-cp38-cp38-manylinux2010_x86_64.whl
+			
+			Error : ModuleNotFoundError: No module named 'pip._internal.cli.main'
+				-> pip 재설치 해야 함
+				sudo apt install curl
+				curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+				python3 get-pip.py --force-reinstall
+
+	ImportError: Python version mismatch: module was compiled for Python 3.5, but the interpreter version is incompatible: 3.8.1 (default, Nov  2 2021, 11:36:06)
+		// 빌드 클리어
+		bazel clean
+		// 재 빌드
+		bazel build //tensorflow/tools/pip_package:build_pip_package
+	
+	->bazel 버전 변경 시도
+		4.2.1 -> 3.7.2
+			sudo rm /usr/bin/bazel
+			sudo ln -s /usr/bin/bazel-3.7.2-linux-x86_64 /usr/bin/bazel
+			sudo chmod 755 /usr/bin/bazel-3.7.2-linux-x86_64 /usr/bin/bazel
+			bazel --version
+
+	ModuleNotFoundError: No module named 'numpy'
+		pip3 install --user --upgrade tensorflow
+		pip3 install six numpy wheel
+		pip3 install keras_applications==1.0.6 --no-deps
+		pip3 install keras_preprocessing==1.0.5 --no-deps
+
+		pip install -U --user pip numpy wheel
+		pip install -U --user keras_preprocessing --no-deps
+		pip3 install -U --user pip numpy wheel
+		pip3 install -U --user keras_preprocessing --no-deps
+		
+		
+	
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+<성공>	
+	INFO: Build completed successfully, 8846 total actions
+	
+패키지 빌드
+	./bazel-bin/tensorflow/tools/pip_package/build_pip_package --nightly_flag /tmp/tensorflow_pkg
+
+패키지 설치
+	pip install /tmp/tensorflow_pkg/<패키지명>
+	
+	
+	
+	
+	
+	
+	
+	
+	
