@@ -1,0 +1,43 @@
+//gpu 사용 절차
+Test환경
+python3 3.8.10
+
+1.GPU 드라이버 install
+https://www.nvidia.com/download/index.aspx?lang=en-us
+
+2.CMD에 nvidia-smi 입력하여 CUDA 버전 확인
+
+3.CUDA Toolkit Downloca & setup
+https://developer.nvidia.com/cuda-toolkit-archive
+
+4.cuDNN download
+https://developer.nvidia.com/rdp/cudnn-archive
+
+5. cuDNN 압축에서 
+cuda\bin 폴더 안의 모든 파일은 => C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\<CUDA버전>\bin
+cuda\include 폴더 안의 모든 파일은 => C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\<CUDA버전>\include
+cuda\lib 폴더 안의 모든 파일은 => C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\<CUDA버전>\lib
+
+6.환경변수 적용
+시스템 변수의 path에 다음과 같이 추가 
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\<CUDA버전>\extras\CUPTI\lib64
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\<CUDA버전>\include
+C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\<CUDA버전>
+
+7.재부팅
+
+8.python에 맞는 패키지 다운로드
+https://www.tensorflow.org/install/pip?hl=ko#windows
+
+9.패키지 설치
+python -m pip install <다운로드 받은 패키지파일명>
+
+10. 추가적인 패키지 설치
+pip install tf-nightly
+
+11. Test
+{
+	import os
+	os.add_dll_directory("C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.5/bin")
+	<처리할 내용>
+}
